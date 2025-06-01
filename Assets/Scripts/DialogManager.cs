@@ -54,7 +54,7 @@ public class DialogManager : MonoBehaviour
         {
             Debug.LogError("Dialog Database is not assinged to Dialog Manager");
         }
-        if(NextButton != null)
+        if (NextButton != null)
         {
             NextButton.onClick.AddListener(NextDialog);           //버튼 리스너 등록
         }
@@ -75,14 +75,14 @@ public class DialogManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     //ID 로 대화 시작 
     public void StartDialog(int dialogId)
     {
         DialogSO dialog = dialogDatabase.GetDialogById(dialogId);
-        if(dialog != null)
+        if (dialog != null)
         {
             StartDialog(dialog);
         }
@@ -99,7 +99,7 @@ public class DialogManager : MonoBehaviour
 
         currentDialog = dialog;
         ShowDialog();
-        dialogPanel.SetActive(true);    
+        dialogPanel.SetActive(true);
     }
 
     public void ShowDialog()
@@ -108,7 +108,7 @@ public class DialogManager : MonoBehaviour
         characterNameText.text = currentDialog.characterName;               //캐릭터 이름 설정
 
         //대화 텍스트 설정 부분 수정
-        if(useTypewriterEffect)
+        if (useTypewriterEffect)
         {
             StartTypingEffect(currentDialog.text);
         }
@@ -119,12 +119,12 @@ public class DialogManager : MonoBehaviour
 
 
         //초상화 설정 (새로 추가된 부분)
-        if(currentDialog.portrait != null)
+        if (currentDialog.portrait != null)
         {
             portraitImage.sprite = currentDialog.portrait;
             portraitImage.gameObject.SetActive(true);
         }
-        else if(!string.IsNullOrEmpty(currentDialog.portraitPath))
+        else if (!string.IsNullOrEmpty(currentDialog.portraitPath))
         {
             //Resources 폴더에서 이미지 로드
             Sprite portrait = Resources.Load<Sprite>(currentDialog.portraitPath);   //Assets/Resources/Characters/Narrator.png (예시 이미지 경로)
@@ -161,7 +161,7 @@ public class DialogManager : MonoBehaviour
     public void NextDialog()                //다음 대화로 진행
     {
 
-        if(isTyping)        //타이핑 중이면 타이핑 완료 처리 
+        if (isTyping)        //타이핑 중이면 타이핑 완료 처리 
         {
             StopTypingEffect();
             dialogText.text = currentDialog.text;
@@ -169,7 +169,7 @@ public class DialogManager : MonoBehaviour
             return;
         }
 
-        if(currentDialog != null && currentDialog.nextId > 0)
+        if (currentDialog != null && currentDialog.nextId > 0)
         {
             DialogSO nextDialog = dialogDatabase.GetDialogById(currentDialog.nextId);
             if (nextDialog != null)
@@ -192,7 +192,7 @@ public class DialogManager : MonoBehaviour
     private IEnumerator TypeText(string text)
     {
         dialogText.text = "";
-        foreach(char c in text)
+        foreach (char c in text)
         {
             dialogText.text += c;
             yield return new WaitForSeconds(typingSpeed);
@@ -203,7 +203,7 @@ public class DialogManager : MonoBehaviour
     //타이핑 효과 중지
     private void StopTypingEffect()
     {
-        if(typingCoroutine != null)
+        if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
             typingCoroutine = null;
@@ -214,7 +214,7 @@ public class DialogManager : MonoBehaviour
     private void StartTypingEffect(string text)
     {
         isTyping = true;
-        if(typingCoroutine != null)
+        if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
@@ -231,7 +231,7 @@ public class DialogManager : MonoBehaviour
     //선택지 초기화 
     private void ClearChoices()
     {
-        foreach(Transform child in choicesPanel.transform)
+        foreach (Transform child in choicesPanel.transform)
         {
             Destroy(child.gameObject);
         }
@@ -241,10 +241,10 @@ public class DialogManager : MonoBehaviour
     //선택지 선택 처리 
     public void SelectChoice(DialogChoiceSO choice)
     {
-        if(choice != null && choice.nextId > 0)
+        if (choice != null && choice.nextId > 0)
         {
             DialogSO nextDialog = dialogDatabase.GetDialogById(choice.nextId);
-            if(nextDialog != null)
+            if (nextDialog != null)
             {
                 currentDialog = nextDialog;
                 ShowDialog();
@@ -265,17 +265,17 @@ public class DialogManager : MonoBehaviour
     {
         choicesPanel.SetActive(true);
 
-        foreach(var choice in currentDialog.choices)
+        foreach (var choice in currentDialog.choices)
         {
             GameObject choiceGO = Instantiate(choiceButtonPrefab, choicesPanel.transform);
-            TextMeshProUGUI buttonText = choiceGO.GetComponentInChildren<TextMeshProUGUI>();   
-            Button button = choiceGO.GetComponent<Button>();    
+            TextMeshProUGUI buttonText = choiceGO.GetComponentInChildren<TextMeshProUGUI>();
+            Button button = choiceGO.GetComponent<Button>();
 
-            if(buttonText != null)
+            if (buttonText != null)
             {
-                buttonText.text = choice.text;  
+                buttonText.text = choice.text;
             }
-            if(button != null)
+            if (button != null)
             {
                 DialogChoiceSO choiceSO = choice;               //람다식에서 사용하기 위해서 지역 변수에 할당
                 button.onClick.AddListener(() => SelectChoice(choiceSO));

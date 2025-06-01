@@ -26,9 +26,9 @@ public class DialogDatabaseSO : ScriptableObject
         if (dialogsById == null)
             Initialize();
 
-        if(dialogsById.TryGetValue(id, out DialogSO dialog))
+        if (dialogsById.TryGetValue(id, out DialogSO dialog))
             return dialog;
 
-        return null;    
+        return null;
     }
 }
