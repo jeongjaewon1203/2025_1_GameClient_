@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-
-public class ItemData
+public class ItemData 
 {
     public int id;
     public string itemName;
@@ -20,18 +19,20 @@ public class ItemData
     public bool isStackable;
     public string iconPath;
 
-    //문자열을 열거형으로 변환하는 매서드
-    public void InitalzeEnus()
+    //문자열을 열거형으로 변환하는 메서드 
+    public void InitalizeEnums()
     {
-        if (Enum.TryParse(itemTypeString, out ItemType parsedType))
+        if(Enum.TryParse(itemTypeString, out ItemType parsedType))
         {
             itemType = parsedType;
         }
         else
         {
-            Debug.LogError($"아이템'{itemName}'에 유효하지 않은 아이템 타입 : {itemTypeString}");
+            Debug.LogError($"아이템 '{itemName}'에 유효하지 않은 아이템 타입 : {itemTypeString}");
             //기본값 설정
             itemType = ItemType.Consumable;
         }
     }
+
+
 }
